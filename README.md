@@ -1,5 +1,10 @@
 # 🔭 Sidecar — A Terminal Translator for Non-Technical People
 
+> **Claim yours in one command:**
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/DUBSOpenHub/copilot-sidecar/main/install.sh | bash
+> ```
+
 **Sidecar watches a developer's terminal and explains what's happening in plain English.**
 
 It's for product managers, designers, executives, and anyone who works *with* developers but doesn't write code. Instead of watching a developer's screen and feeling lost, you get a running commentary — like a sports announcer for software development.
@@ -148,9 +153,9 @@ OUTCOME-REPORT.md           ← Final scorecard against requirements
 
 ## How This Was Built
 
-This project was built using the [Dark Factory](https://github.com/greggcochran/dark-factory) pipeline — an agentic build system that orchestrates 6 specialist AI agents through a checkpoint-gated process with sealed-envelope testing:
+This project was built using the [Dark Factory](https://github.com/DUBSOpenHub/dark-factory) pipeline — an agentic build system that orchestrates 6 specialist AI agents through a checkpoint-gated process with sealed-envelope testing:
 
-1. **Product Manager** → Wrote the PRD (actually pre-written by [Havoc Hackathon](https://github.com/greggcochran/havoc-hackathon) #48 — 23 AI agents across 13 models)
+1. **Product Manager** → Wrote the PRD (actually pre-written by [Havoc Hackathon](https://github.com/DUBSOpenHub/havoc-hackathon) #48 — 23 AI agents across 13 models)
 2. **Architect** → Designed the system (ARCH.md)
 3. **QA Engineer** → Wrote behavioral tests from the spec alone, never seeing code (sealed-envelope protocol)
 4. **Lead Engineer** → Built the implementation and open tests
@@ -161,6 +166,14 @@ This project was built using the [Dark Factory](https://github.com/greggcochran/
 *"Sealed-envelope testing"* means the QA engineer writes tests from the spec before any code exists, and never sees the implementation. The engineer never sees the QA tests. This catches spec-vs-implementation drift that traditional TDD misses.
 
 ---
+
+---
+
+## 📸 Screenshots
+
+<!-- Screenshots coming soon! If you'd like to contribute screenshots, open a PR. -->
+
+_Screenshots of the Sidecar experience will be added here. Want to help? Run Sidecar and share a screenshot in a [pull request](https://github.com/DUBSOpenHub/copilot-sidecar/pulls)!_
 
 ## Platform Support
 

@@ -1,0 +1,55 @@
+name: ✅ CI — Validate Shell & JSON
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: 🔍 Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐚 Shell syntax check
+        run: |
+          echo "Checking sidecar.sh..."
+          bash -n sidecar.sh
+          echo "✅ sidecar.sh — syntax OK"
+
+          echo "Checking install.sh..."
+          bash -n install.sh
+          echo "✅ install.sh — syntax OK"
+
+      - name: 📋 JSON validation
+        run: |
+          python3 -c "
+          import json, glob, sys
+          errors = 0
+          for f in sorted(glob.glob('sidecar/*.json') + glob.glob('sidecar/**/*.json', recursive=True)):
+              try:
+                  json.load(open(f))
+                  print(f'  ✅ {f}')
+              except Exception as e:
+                  print(f'  ❌ {f}: {e}')
+                  errors += 1
+          sys.exit(1 if errors else 0)
+          "
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 📦 Install test dependencies
+        run: pip install pytest
+
+      - name: 🧪 Run tests
+        run: python3 -m pytest test_open.py test_sealed.py -q
