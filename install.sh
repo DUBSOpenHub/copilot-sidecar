@@ -48,13 +48,13 @@ trap cleanup EXIT INT TERM
 # ─── HELPERS ────────────────────────────────────────────────
 # Colors (with fallback for pipes)
 if [ -t 1 ] 2>/dev/null; then
-  GREEN="\033[0;32m"
-  YELLOW="\033[0;33m"
-  RED="\033[0;31m"
-  BLUE="\033[0;34m"
-  BOLD="\033[1m"
-  DIM="\033[2m"
-  RESET="\033[0m"
+  GREEN=$'\033[0;32m'
+  YELLOW=$'\033[0;33m'
+  RED=$'\033[0;31m'
+  BLUE=$'\033[0;34m'
+  BOLD=$'\033[1m'
+  DIM=$'\033[2m'
+  RESET=$'\033[0m'
 else
   GREEN="" YELLOW="" RED="" BLUE="" BOLD="" DIM="" RESET=""
 fi
@@ -169,13 +169,15 @@ check_gh() {
 }
 
 check_copilot_extension() {
-  if gh extension list 2>/dev/null | grep -q "copilot"; then
-    success "GitHub Copilot CLI extension is installed"
+  # Copilot may be built-in to gh CLI (newer versions) or an extension (older)
+  if gh copilot --version >/dev/null 2>&1; then
+    success "GitHub Copilot CLI is available"
     return 0
   fi
 
-  warn "Copilot CLI extension is not installed — installing now..."
-  info "This extension lets GitHub Copilot work in your terminal."
+  # Try installing as extension (older gh versions)
+  warn "Copilot CLI is not available — installing now..."
+  info "This lets GitHub Copilot work in your terminal."
   echo ""
 
   if gh extension install github/gh-copilot 2>/dev/null; then
@@ -183,9 +185,15 @@ check_copilot_extension() {
     return 0
   fi
 
-  fail "Could not install the Copilot CLI extension."
+  # Check again — might have become available after extension install
+  if gh copilot --version >/dev/null 2>&1; then
+    success "GitHub Copilot CLI is available"
+    return 0
+  fi
+
+  fail "Could not set up the Copilot CLI."
   echo "  Make sure you're logged in to GitHub CLI: gh auth login"
-  echo "  Then try: gh extension install github/gh-copilot"
+  echo "  Then try running this installer again."
   exit 1
 }
 
