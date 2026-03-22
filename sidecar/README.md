@@ -1,122 +1,60 @@
-# Copilot Sidecar — Non-Technical Experience
+# Sidecar Skill — Installation & Reference
 
-> Your friendly terminal companion. Watches what developers do and explains it in plain English.
+> This is the skill package that gets installed to `~/.copilot/skills/sidecar/`.
+> For the full project overview, see the [top-level README](../README.md).
 
-## What Is Sidecar?
+## What's in This Folder
 
-Copilot Sidecar sits in a side panel next to a developer's terminal. It watches what's happening and translates everything into plain language — no coding knowledge required.
+| File | Purpose |
+|------|---------|
+| `SKILL.md` | The core brain — 1,300 lines of prompt instructions that tell Copilot CLI how to behave as a non-technical companion |
+| `jargon-dictionary.json` | 53 technical terms with plain-English definitions, used by the jargon firewall |
+| `narration-cards.json` | 10 command patterns (git diff, npm test, etc.) mapped to 3-line explanation cards |
+| `question-templates.json` | Context-aware suggested questions, organized by event type (test failure, build error, etc.) |
+| `demos/` | 3 pre-recorded terminal walkthroughs for Demo Mode |
+| `README.md` | This file |
 
-**Three things Sidecar does:**
+## Install
 
-| Mode | What it does |
-|------|-------------|
-| 👀 **Watch** | Narrates what the developer is doing, like a sports commentator |
-| 💬 **Ask** | Answers any question in plain English — no jargon |
-| 💡 **Suggest** | Points out interesting things happening in the code |
+```bash
+cp -r sidecar/ ~/.copilot/skills/sidecar/
+```
 
-## Prerequisites
+## What Gets Created at Runtime
 
-| Tool | What it does | Install |
-|------|-------------|---------|
-| **GitHub CLI** (`gh`) | Connects to GitHub Copilot | [cli.github.com](https://cli.github.com) |
-| **tmux** (optional) | Splits your terminal into two panels | `brew install tmux` (Mac) or `sudo apt install tmux` (Linux) |
+When Sidecar runs for the first time, it creates these files automatically:
 
-## Installation
+```
+~/.copilot/sidecar/
+├── user-profile.json        ← Your language level, glossary progress, session count
+├── session-link.json        ← Which terminal session Sidecar is watching
+├── launcher.log             ← Launch events (JSON, append-only)
+└── runtime/pane-capture/    ← Screen capture state for live narration
+```
 
-1. **Install the Sidecar skill:**
-   ```bash
-   # Copy the sidecar/ folder to your Copilot skills directory
-   cp -r sidecar/ ~/.copilot/skills/sidecar/
-   ```
+## Customizing
 
-2. **Install the launcher:**
-   ```bash
-   cp sidecar.sh ~/bin/sidecar
-   chmod +x ~/bin/sidecar
-   ```
+**Add jargon terms:** Edit `jargon-dictionary.json` — add `"term": "plain English definition"`.
 
-3. **Launch Sidecar:**
-   ```bash
-   sidecar
-   ```
+**Add narration cards:** Edit `narration-cards.json` — add a card with `pattern` (regex), `emoji`, `title`, `what`, `why`, `next`.
 
-   Or without tmux (solo mode):
-   ```bash
-   sidecar --solo
-   ```
+**Add demo replays:** Create a `.jsonl` file in `demos/` with events like `{"type": "command", "text": "git status", "delay_ms": 1000}` and register it in `demos/index.json`.
 
-## Quick Start
-
-After launching, Sidecar will:
-
-1. **Check your setup** — makes sure everything is installed
-2. **Ask one question** — to set your experience level
-3. **Start watching** — begins narrating what the developer does
-
-That's it! You're ready to go.
-
-## Commands
-
-Type any of these at any time:
+## Quick Command Reference
 
 | Command | What it does |
 |---------|-------------|
-| `safe?` | Instantly shows whether everything is OK |
-| `chips` | Shows suggested questions you can ask |
-| `what?` | Explains the last thing that happened |
-| `glossary` | Shows terms you've learned so far |
-| `beginner` | Switch to simple explanations |
-| `expert` | Switch to technical mode |
-| `teach me about X` | Practice explaining a concept |
-| `1`, `2`, `3`, `4` | Select a suggested question |
-
-## How It Works
-
-Sidecar reads the developer's terminal screen (read-only — it never changes anything) and:
-
-1. **Detects commands** — recognizes what the developer typed
-2. **Translates** — explains it in plain English using narration cards
-3. **Filters jargon** — replaces technical terms with simple definitions
-4. **Suggests questions** — shows things you might want to ask about
-
-## Demo Mode
-
-If no developer is actively working, Sidecar enters **Demo Mode** — a guided replay showing what AI-assisted development looks like. Three demos are included:
-
-1. **Checking the Code** — watching a developer review changes
-2. **Running Quality Checks** — seeing how automated testing works
-3. **AI Helpers Working Together** — watching AI agents collaborate
+| `safe?` | Instant safety check |
+| `what?` | Explain what just happened |
+| `chips` | Show suggested questions |
+| `glossary` | Show terms you've learned |
+| `beginner` / `expert` | Switch language level |
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| "tmux not found" | Install tmux or use `sidecar --solo` |
-| "gh not found" | Install GitHub CLI from [cli.github.com](https://cli.github.com) |
-| "Skill not installed" | Copy sidecar/ to `~/.copilot/skills/sidecar/` |
-| Sidecar shows stale info | Type `what?` to refresh, or check the freshness badge |
-
-## Files
-
-```
-~/.copilot/skills/sidecar/     ← Skill files (you install these)
-├── SKILL.md                    ← Main brain of the skill
-├── jargon-dictionary.json      ← Technical term definitions
-├── narration-cards.json        ← Command explanation cards
-├── question-templates.json     ← Suggested question templates
-├── demos/                      ← Pre-recorded demo replays
-│   ├── index.json
-│   ├── 01-checking-code.jsonl
-│   ├── 02-running-tests.jsonl
-│   └── 03-ai-agents.jsonl
-└── README.md                   ← This file
-
-~/.copilot/sidecar/            ← Runtime data (created automatically)
-├── user-profile.json           ← Your preferences and progress
-├── session-link.json           ← Current session info
-└── runtime/                    ← Screen capture data
-```
-
----
-
-*Built with ❤️ for people who work with developers but don't write code.*
+| Problem | Fix |
+|---------|-----|
+| "tmux not found" | `brew install tmux` (Mac) or `sudo apt install tmux` (Linux), or use `sidecar --solo` |
+| "gh not found" | Install from [cli.github.com](https://cli.github.com) |
+| Sidecar shows stale info | Type `what?` to refresh — check the freshness badge (🟢 🟡 🔴) |
+| Profile seems corrupted | Delete `~/.copilot/sidecar/user-profile.json` — Sidecar will re-run onboarding |
