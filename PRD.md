@@ -1024,7 +1024,7 @@ tmux capture-pane -t "$MAIN_PANE_ID" -p -S -2000 -E -1
   "main_pane_id": "%12",
   "sidecar_pane_id": "%13",
   "attached_at": "2026-03-22T01:23:45Z",
-  "cwd_hint": "/Users/greggcochran/project",
+  "cwd_hint": "/Users/yourname/project",
   "capture_lines": 2000
 }
 ```
